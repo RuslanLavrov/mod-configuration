@@ -93,7 +93,7 @@ public class RestVerticleTest {
 
     port = NetworkUtils.nextFreePort();
 
-    tClient = new TenantClient("http://localhost:"+Integer.toString(port), TENANT_ID, TOKEN);
+    tClient = new TenantClient("http://localhost:"+Integer.toString(port), TENANT_ID, null);
 
     DeploymentOptions options = new DeploymentOptions().setConfig(
       new JsonObject().put("http.port", port)).setWorker(true);
@@ -1322,6 +1322,10 @@ public class RestVerticleTest {
       });
   }
 
+  @Test
+  public void checkSample(TestContext context) {
+    createSampleRecords(context);
+  }
   /**
    * This method, iterates through the urls.csv and runs each url - currently only checking the returned status codes
    */
@@ -1493,7 +1497,7 @@ public class RestVerticleTest {
       int statusCode = response.statusCode();
       if(method == HttpMethod.POST && statusCode == 201){
         try {
-          log.debug("Location - " + response.getHeader("Location"));
+          log.info("Location - " + response.getHeader("Location"));
           Config conf =  new ObjectMapper().readValue(content, Config.class);
           conf.setDescription(conf.getDescription());
           mutateURLs("http://localhost:" + port + response.getHeader("Location"), context, HttpMethod.PUT,

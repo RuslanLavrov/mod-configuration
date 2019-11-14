@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static io.vertx.core.Future.succeededFuture;
+import org.folio.rest.persist.PgUtil;
 
 @Path("configurations")
 public class ConfigAPI implements Configurations {
@@ -116,6 +117,10 @@ public class ConfigAPI implements Configurations {
 
     defaultToEnabled(entity);
 
+    if (false) {
+      log.info("XXXX POST");
+      PgUtil.post(CONFIG_TABLE, entity, okapiHeaders, context, PostConfigurationsEntriesResponse.class, asyncResultHandler);
+    } else {
     context.runOnContext(v -> {
       try {
         log.debug("sending... postConfigurationsTables");
@@ -158,7 +163,7 @@ public class ConfigAPI implements Configurations {
           .respond500WithTextPlain(messages.getMessage(lang, MessageConsts.InternalServerError))));
       }
     });
-
+    }
   }
 
   @Validate
